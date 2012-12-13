@@ -18,11 +18,14 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+import foize.megamobile.R;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
@@ -45,13 +48,34 @@ public class LinphonePreferencesSIPAccountActivity extends PreferenceActivity {
 	OnPreferenceChangeListener preferenceChangedListener = new OnPreferenceChangeListener() {
 		@Override
 		public boolean onPreferenceChange(Preference preference, Object newValue) {
-			preference.setSummary(newValue.toString());
+			String key = preference.getKey();
+			if (key.startsWith(getString(R.string.pref_username_key)))
+			{
+				if (newValue.toString().startsWith("SD"))
+				{
+					preference.setSummary(newValue.toString());
+				}
+				else
+				{
+					String editednewValue = "SD" + newValue.toString();
+					preference.setSummary(editednewValue);
+					SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+					Editor edit 		   = pref.edit();
+					edit.putString(key, editednewValue);
+					edit.commit();
+					return false;
+				}
+			
+			}
+			else
+				preference.setSummary(newValue.toString());
 			return true;
 		}		
 	};
 	
 	private void addExtraAccountPreferencesFields(PreferenceScreen parent, final int n) {
-    	final SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
+    	
+		final SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
 		
     	EditTextPreference username = new EditTextPreference(this);
     	username.getEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
@@ -60,6 +84,7 @@ public class LinphonePreferencesSIPAccountActivity extends PreferenceActivity {
     	username.setDialogMessage(getString(R.string.pref_help_username));
     	username.setKey(getString(R.string.pref_username_key) + getAccountNumber(n));
     	username.setOnPreferenceChangeListener(preferenceChangedListener);
+
     	
     	EditTextPreference password = new EditTextPreference(this);
     	password.getEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);

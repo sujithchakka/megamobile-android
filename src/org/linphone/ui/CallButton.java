@@ -19,11 +19,20 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.linphone.ui;
 
 import org.linphone.LinphoneManager;
-import org.linphone.R;
+import org.linphone.LinphonePreferenceManager;
+import foize.megamobile.R;
+import foize.megamobile.R.string;
 import org.linphone.core.LinphoneCoreException;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.preference.PreferenceManager;
+import android.text.InputFilter.LengthFilter;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -50,7 +59,37 @@ public class CallButton extends ImageButton implements OnClickListener, AddressA
 		try {
 			if (!LinphoneManager.getInstance().acceptCallIfIncomingPending()) {
 				if (mAddress.getText().length() >0) { 
-					LinphoneManager.getInstance().newOutgoingCall(mAddress);
+					if (LinphoneManager.getInstance().getCallMode() == LinphoneManager.SIPCALLMODE)
+					{
+						LinphoneManager.getInstance().newOutgoingCall(mAddress);
+					}
+					else
+					{
+						 try {
+							 	SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+							 	String AddressText = mAddress.getText().toString();
+							 	
+							 	// Get callthrough number, username and password from settings
+							 	String Callthroughnumber = pref.getString(getResources().getString(R.string.pref_callthrough_phonenumber_key), getResources().getString(R.string.pref_callthrough_phonenumber_default));
+							 	String Password 		 = pref.getString(getResources().getString(R.string.pref_passwd_key), "unknown");
+							 	String Account  		 = pref.getString(getResources().getString(R.string.pref_username_key), "unknown");
+							 	
+							 	if (Account.startsWith("SD"))
+							 		Account = Account.substring(2);
+							 	
+							 	// Clean called number
+							 	AddressText = cleanAddress(AddressText);
+						        
+							 	// Start a call intent and let android OS handle the call
+							 	Intent callIntent = new Intent(Intent.ACTION_CALL);
+							 	String callString = String.format("tel:%s,%s%s%s",Callthroughnumber,Account, Password, AddressText);
+						        callIntent.setData(Uri.parse(callString));
+						        getContext().startActivity(callIntent);
+						        
+						    } catch (ActivityNotFoundException activityException) {
+						         Log.e("Error", "Call failed", activityException);
+						    }
+					}
 				}
 			}
 		} catch (LinphoneCoreException e) {
@@ -68,6 +107,80 @@ public class CallButton extends ImageButton implements OnClickListener, AddressA
 				,Toast.LENGTH_LONG);
 		toast.show();
 	}
+	
+	private String cleanAddress(String input)
+	{
+		String output = input;
+		
+		if (output.startsWith("+"))
+		{
+			output = output.substring(1, output.length()-1);
+		}
+		// Remove leading zero´s if present
+		if (output.startsWith("00"))
+		{
+			output = output.substring(2, output.length()-2);
+		}
+		
+		if (output.startsWith("06"))
+		{
+			String prefix = getCountryPrefix();
+		
+			output = prefix + output.substring(1);
+		}
+		
+		// Remove any non digit characters
+		output = output.replaceAll("[^\\d/g]", "");
+
+		return output;
+	}
+	
+	private String getCountryPrefix()
+	{
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+		String selectedCountry = pref.getString(getResources().getString(string.pref_callthrough_country_key), getResources().getString(string.callthrough_country_entry_value_netherlands));
+		if (selectedCountry.equals(getResources().getString(R.string.callthrough_country_entry_value_france)))
+		{
+			return getResources().getString(R.string.prefix_france);
+		}
+		else if (selectedCountry.equals(getResources().getString(R.string.callthrough_country_entry_value_germany)))
+		{
+			return getResources().getString(R.string.prefix_germany);
+		}
+		else if (selectedCountry.equals(getResources().getString(R.string.callthrough_country_entry_value_ireland)))
+		{
+			return getResources().getString(R.string.prefix_ireland);
+		}
+		else if (selectedCountry.equals(getResources().getString(R.string.callthrough_country_entry_value_netherlands)))
+		{
+			return getResources().getString(R.string.prefix_netherlands);
+		}
+		else if (selectedCountry.equals(getResources().getString(R.string.callthrough_country_entry_value_norway)))
+		{
+			return getResources().getString(R.string.prefix_norway);
+		}
+		else if (selectedCountry.equals(getResources().getString(R.string.callthrough_country_entry_value_poland)))
+		{
+			return getResources().getString(R.string.prefix_poland);
+		}
+		else if (selectedCountry.equals(getResources().getString(R.string.callthrough_country_entry_value_spain)))
+		{
+			return getResources().getString(R.string.prefix_spain);
+		}
+		else if (selectedCountry.equals(getResources().getString(R.string.callthrough_country_entry_value_sweden)))
+		{
+			return getResources().getString(R.string.prefix_sweden);
+		}
+		else if (selectedCountry.equals(getResources().getString(R.string.callthrough_country_entry_value_united_kingdom)))
+		{
+			return getResources().getString(R.string.prefix_united_kingdom);
+		}
+		else
+		{
+			return "";
+		}
+	}
+	
 
 
 }

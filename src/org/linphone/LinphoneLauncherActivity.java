@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 package org.linphone;
 
 import static android.content.Intent.ACTION_MAIN;
+import foize.megamobile.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;

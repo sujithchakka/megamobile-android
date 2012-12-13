@@ -22,7 +22,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
-import org.linphone.R;
+import foize.megamobile.R;
 
 import android.app.Activity;
 import android.os.Bundle;

@@ -30,6 +30,8 @@ import org.linphone.mediastream.video.capture.hwconf.AndroidCameraConfiguration;
 import org.linphone.ui.Numpad;
 import org.linphone.ui.ToggleImageButton;
 
+import foize.megamobile.R;
+
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;

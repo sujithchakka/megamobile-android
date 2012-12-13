@@ -36,10 +36,15 @@ import org.linphone.ui.CallButton;
 import org.linphone.ui.CameraView;
 import org.linphone.ui.EraseButton;
 
+import foize.megamobile.R;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.hardware.Camera;
@@ -55,6 +60,9 @@ import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -62,6 +70,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.SlidingDrawer;
 import android.widget.SlidingDrawer.OnDrawerScrollListener;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -84,6 +93,7 @@ public class DialerActivity extends Activity implements LinphoneGuiListener {
 	private AddressText mAddress;
 	private CallButton mCall;
 	private Button mBack, mAddCall, mSwitchCamera;
+	private Spinner mSpinnerMode;
 	private LinearLayout mInCallControls;
 
 	private static DialerActivity instance;
@@ -212,14 +222,76 @@ public class DialerActivity extends Activity implements LinphoneGuiListener {
 		if (Version.isXLargeScreen(this)) {
 			this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		}
-		setContentView(R.layout.dialer);
+		setContentView(R.layout.dailer_megamobile);
 
 		mAddress = (AddressText) findViewById(R.id.SipUri); 
-		EraseButton erase = (EraseButton) findViewById(R.id.Erase);
+		EraseButton erase = (EraseButton) findViewById(R.id.EraseButton);
 		erase.setAddressWidget(mAddress);
 		erase.requestFocus();
+		
+		IntentFilter intfilter = new IntentFilter(LinphoneActivity.DAILMODE_CHANGE);
+		BroadcastReceiver dailmodeChange = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				// TODO Auto-generated method stub
+				int callMode = LinphoneManager.getInstance().getCallMode();
+				if (callMode == LinphoneManager.SIPCALLMODE)
+				{
+					mCall.setBackgroundResource(R.drawable.call_button_sip);
+				}
+				else
+				{
+					mCall.setBackgroundResource(R.drawable.call_button_gsm);
+				}
+			}
+		};
+		registerReceiver(dailmodeChange, intfilter);	
+		
+		/*
+		mSpinnerMode = (Spinner) findViewById(R.id.spinner_dailmode);
+	
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+		        R.array.dail_modes, android.R.layout.simple_spinner_item);
+		// Specify the layout to use when the list of choices appears
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		// Apply the adapter to the spinner
+		mSpinnerMode.setAdapter(adapter);
+		
+		mSpinnerMode.setOnItemSelectedListener( new OnItemSelectedListener( ) {
 
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View parent,
+					int pos, long id) {
+				if (pos == 0)
+				{
+					LinphoneManager.getInstance().setCallMode(LinphoneManager.SIPCALLMODE);
+					mCall.setBackgroundResource(R.drawable.call_button_sip);
+				}
+				else
+				{
+					LinphoneManager.getInstance().setCallMode(LinphoneManager.GSMCALLMODE);
+					mCall.setBackgroundResource(R.drawable.call_button_gsm);
+				}
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		*/
 		mCall = (CallButton) findViewById(R.id.Call);
+		if (LinphoneManager.getInstance().getCallMode() == LinphoneManager.GSMCALLMODE)
+		{
+			mCall.setBackgroundResource(R.drawable.call_button_gsm);
+		}
+		else
+		{
+			mCall.setBackgroundResource(R.drawable.call_button_sip);
+		}
+		
 		mCall.setAddressWidget(mAddress);
 		mBack = (Button) findViewById(R.id.Back);
 		mAddCall = (Button) findViewById(R.id.AddCall);

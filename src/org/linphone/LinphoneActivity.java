@@ -34,6 +34,9 @@ import org.linphone.core.Log;
 import org.linphone.mediastream.Version;
 import org.linphone.mediastream.video.capture.hwconf.Hacks;
 
+import foize.functions.CallthroughLocationSetter;
+import foize.megamobile.R;
+
 import android.app.AlertDialog;
 import android.app.TabActivity;
 import android.content.Context;
@@ -51,7 +54,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.OrientationEventListener;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
 import android.widget.TextView;
@@ -62,16 +68,18 @@ public class LinphoneActivity extends TabActivity implements ContactPicked
 		{
 	public static final String DIALER_TAB = "dialer";
     public static final String PREF_FIRST_LAUNCH = "pref_first_launch";
+    public static final String DAILMODE_CHANGE = "DAILMODE_CHANGE";
     private static final int video_activity = 100;
     private static final int FIRST_LOGIN_ACTIVITY = 101;
     private static final int INCOMING_CALL_ACTIVITY = 103;
 	private static final int incall_activity = 104;
 	private static final int conferenceDetailsActivity = 105;
     private static final String PREF_CHECK_CONFIG = "pref_check_config";
-
+    CallthroughLocationSetter locSetter;
 	private static LinphoneActivity instance;
 	private OrientationEventListener mOrientationHelper;
 	private Handler mHandler = new Handler();
+	private Button mButtonDailMode;
 
 	// Customization
 	private static boolean useFirstLoginActivity;
@@ -91,7 +99,7 @@ public class LinphoneActivity extends TabActivity implements ContactPicked
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+		//InitializeCallThroughNumber();
 		if (Version.isXLargeScreen(this)) {
 			this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 		}
@@ -105,6 +113,38 @@ public class LinphoneActivity extends TabActivity implements ContactPicked
 		}
 		instance = this;
 		setContentView(R.layout.main);
+		// 20121212 Change the text of the dailmode button acroding to the current dailmode
+		mButtonDailMode = (Button) findViewById(R.id.buttonDailMode);
+		int callmode = LinphoneManager.getInstance().getCallMode();
+		if (callmode == LinphoneManager.SIPCALLMODE)
+		{
+			mButtonDailMode.setText("SIP");
+		}
+		else
+		{
+			mButtonDailMode.setText("GSM");
+		}
+		// When the dailmode button is being pressed change its text and set the dailmode
+		mButtonDailMode.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				int callmode = LinphoneManager.getInstance().getCallMode();
+				if (callmode == LinphoneManager.SIPCALLMODE)
+				{
+					LinphoneManager.getInstance().setCallMode(LinphoneManager.GSMCALLMODE);
+					mButtonDailMode.setText("GSM");
+					AnounceDailModeChange();
+				}
+				else
+				{
+					LinphoneManager.getInstance().setCallMode(LinphoneManager.SIPCALLMODE);
+					mButtonDailMode.setText("SIP");
+					AnounceDailModeChange();
+				}
+				
+			}
+		});
 		
 		@SuppressWarnings("deprecation")
 		int rotation = Compatibility.getRotation(getWindowManager().getDefaultDisplay());
@@ -116,7 +156,6 @@ public class LinphoneActivity extends TabActivity implements ContactPicked
 		
 		LinphoneManager.getLc().setDeviceRotation(rotation);
 		mAlwaysChangingPhoneAngle = rotation;
-
 		LinphonePreferenceManager.getInstance(this);
 		useFirstLoginActivity = getResources().getBoolean(R.bool.useFirstLoginActivity);
 		useMenuSettings = getResources().getBoolean(R.bool.useMenuSettings);
@@ -145,7 +184,11 @@ public class LinphoneActivity extends TabActivity implements ContactPicked
 		LinphoneManager.addListener(this);
 	}
 	
-	
+	private void AnounceDailModeChange()
+	{
+		Intent inte = new Intent(LinphoneActivity.DAILMODE_CHANGE);
+		sendBroadcast(inte);
+	}
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -187,21 +230,22 @@ public class LinphoneActivity extends TabActivity implements ContactPicked
 
 	private synchronized void fillTabHost() {
 		if (((TabWidget) findViewById(android.R.id.tabs)).getChildCount() != 0) return;
-
+			
 	    startActivityInTab("history",
 	    		new Intent().setClass(this, HistoryActivity.class),
-	    		R.string.tab_history, R.drawable.history_orange);
+	    		R.string.tab_history, R.drawable.historyarrow);
 
 	    
 	    startActivityInTab(DIALER_TAB,
 	    		new Intent().setClass(this, DialerActivity.class).setData(getIntent().getData()),
-	    		R.string.tab_dialer, R.drawable.dialer_orange);
+	    		R.string.tab_dialer, R.drawable.tab_numpad);
 	    
 
 	    startActivityInTab("contact",
 	    		new Intent().setClass(this, Version.sdkAboveOrEqual(5) ?
 	    		ContactPickerActivityNew.class : ContactPickerActivityOld.class),
-	    		R.string.tab_contact, R.drawable.contact_orange);
+	    		R.string.tab_contact, R.drawable.ic_contact_tab);
+	  //  ((TabWidget) findViewById(android.R.id.tabs)).getChildAt(0).setBackgroundResource(R.drawable.tabicon_orange);
 
 
 	    selectDialerTab();
@@ -250,6 +294,7 @@ public class LinphoneActivity extends TabActivity implements ContactPicked
 			instance = null;
 		}
 	}
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -584,6 +629,8 @@ public class LinphoneActivity extends TabActivity implements ContactPicked
 			startIncomingCallActivity();
 		} 
 	}
+	
+	
 
 	@Override
 	public void goToDialer() {
@@ -594,6 +641,7 @@ public class LinphoneActivity extends TabActivity implements ContactPicked
 		startActivityForResult(new Intent().setClass(this, ConferenceDetailsActivity.class), conferenceDetailsActivity);
 	}
 }
+
 
 interface ContactPicked {
 	void setAddressAndGoToDialer(String number, String name, Uri photo);

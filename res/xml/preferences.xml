@@ -22,6 +22,21 @@
 
 	<Preference android:title="Add Account"></Preference>
 	<Preference android:title="@string/wizard_title"></Preference>
+	
+		<PreferenceCategory android:title="@string/pref_callthrough">
+	    		<ListPreference android:title="@string/pref_callthrough_country"
+					android:key="@string/pref_callthrough_country_key"
+					android:entries="@array/pref_countries_entries"
+					android:entryValues="@array/pref_country_entry_values"
+					android:defaultValue="@string/pref_callthrough_country_default"
+				/> 
+				
+	    		<CheckBoxPreference android:title="@string/pref_callthrough_country_autodetect"
+	    		    android:key="@string/pref_callthrough_country_autodetect_key"
+	    		    android:defaultValue="@string/pref_callthrough_country_autodetect_defaultvalue"/>
+	    
+				
+	</PreferenceCategory>
 
     <PreferenceCategory android:key="@string/pref_tunnel_key" android:title="@string/pref_tunnel">
             <EditTextPreference android:title="@string/pref_tunnel_host"
@@ -37,9 +52,8 @@
                     android:key="@string/pref_tunnel_mode_key" />
     </PreferenceCategory>
 	    
-
-
-	<PreferenceCategory android:title="@string/pref_preferences">
+    
+    <PreferenceCategory android:title="@string/pref_preferences">
 		<CheckBoxPreference android:title="@string/pref_autostart"
 			android:key="@string/pref_autostart_key" android:defaultValue="false"></CheckBoxPreference>
 
@@ -51,6 +65,9 @@
 		<EditTextPreference android:title="@string/pref_stun_server"
 			android:key="@string/pref_stun_server_key"></EditTextPreference>
 	</PreferenceCategory>
+
+
+
 
 
 

@@ -2,18 +2,59 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/main_frame" android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
+			
 	<TabHost android:id="@android:id/tabhost" android:layout_width="fill_parent"
 		android:layout_height="fill_parent">
-		<LinearLayout android:orientation="vertical"
+		<RelativeLayout android:orientation="vertical"
 			android:layout_width="fill_parent" android:layout_height="fill_parent">
 			<!--
 				android:padding="5dp"
 			-->
+			<RelativeLayout android:id="@+id/layoutMegamobilebar" android:background="@drawable/megamobile_gradient" android:layout_width="fill_parent" android:layout_height="50dp">
+			   <Button
+    			android:id="@+id/buttonDailMode"
+    			android:layout_width="60dp"
+    			android:layout_height="35dp" 
+    			android:layout_marginLeft="10dp"
+    			android:layout_centerVertical="True"
+    			android:textStyle="bold"
+    			android:textColor="@android:color/white"
+    			android:textSize="16sp"
+    			android:background="@drawable/megamobile_button_dailmode"	
+    			/>
+			    		
+			    <TextView android:id="@+id/textViewAppName" android:text="@string/app_name" 
+			        android:layout_width="wrap_content" 
+			        android:layout_height="wrap_content" 
+			        android:layout_centerHorizontal="True"
+			        android:layout_centerVertical="True"
+			        android:textStyle="bold"
+			        android:textSize="20sp"
+			        android:textColor="@android:color/white"/>
+			    <TextView
+    			android:id="@+id/TextViewPrepaidCredit"
+    			android:layout_width="60dp"
+    			android:layout_height="35dp" 
+    			android:layout_marginLeft="10dp"
+    			android:layout_centerVertical="True"
+    			android:textStyle="bold"
+    			android:textColor="@android:color/white"
+    			android:textSize="16sp"
+    			android:text="€..,.."
+    			android:layout_alignParentRight="true"
+    			android:layout_marginRight="10dp"
+    			android:gravity="center"
+    			android:background="@drawable/megamobile_button"	
+    			/>
+			</RelativeLayout>
+		
+				
 			<TabWidget android:id="@android:id/tabs"
-				android:layout_width="fill_parent" android:layout_height="wrap_content" />
+				android:layout_width="fill_parent" android:layout_alignParentBottom = "true" android:layout_height="wrap_content" />
 			<FrameLayout android:id="@android:id/tabcontent"
-				android:layout_width="fill_parent" android:layout_height="fill_parent" />
-		</LinearLayout>
+				android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_below="@id/layoutMegamobilebar"  android:layout_above="@android:id/tabs"/>
+			
+		</RelativeLayout>
 
 	</TabHost>
 </FrameLayout>

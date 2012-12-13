@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:orientation="vertical"
-	android:gravity="center" android:layout_height="fill_parent">
-	<ImageView android:id="@+id/ImageView01"
-		android:layout_height="wrap_content" android:layout_width="wrap_content"
-		android:src="@drawable/linphone_banner"></ImageView>
+	android:gravity="center" android:layout_height="fill_parent"
+	>
+	<ImageView android:id="@+id/ImageViewMegaMobileLogo"
+	    android:layout_width="150dip"
+	    android:layout_height="150dip"
+	    android:src="@drawable/megamobile_icon_large"
+	    android:contentDescription="Logo">	    
+	</ImageView>
+
 	<TextView android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:text="@string/about_text"
 		android:autoLink="web" android:gravity="center" android:paddingTop="50sp"

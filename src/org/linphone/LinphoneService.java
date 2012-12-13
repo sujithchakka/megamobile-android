@@ -36,6 +36,8 @@ import org.linphone.core.Log;
 import org.linphone.core.OnlineStatus;
 import org.linphone.mediastream.Version;
 
+import foize.megamobile.R;
+
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;

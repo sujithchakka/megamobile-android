@@ -20,6 +20,8 @@ package org.linphone;
 
 import org.linphone.core.Log;
 
+import foize.megamobile.R;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;

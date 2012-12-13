@@ -19,21 +19,23 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 package org.linphone;
 
-import static org.linphone.R.string.ec_calibrating;
-import static org.linphone.R.string.pref_codec_amr_key;
-import static org.linphone.R.string.pref_codec_amrwb_key;
-import static org.linphone.R.string.pref_codec_ilbc_key;
-import static org.linphone.R.string.pref_codec_speex16_key;
-import static org.linphone.R.string.pref_echo_cancellation_key;
-import static org.linphone.R.string.pref_echo_canceller_calibration_key;
-import static org.linphone.R.string.pref_media_encryption_key;
-import static org.linphone.R.string.pref_video_enable_key;
+import static foize.megamobile.R.string.ec_calibrating;
+import static foize.megamobile.R.string.pref_codec_amr_key;
+import static foize.megamobile.R.string.pref_codec_amrwb_key;
+import static foize.megamobile.R.string.pref_codec_ilbc_key;
+import static foize.megamobile.R.string.pref_codec_speex16_key;
+import static foize.megamobile.R.string.pref_echo_cancellation_key;
+import static foize.megamobile.R.string.pref_echo_canceller_calibration_key;
+import static foize.megamobile.R.string.pref_media_encryption_key;
+import static foize.megamobile.R.string.pref_video_enable_key;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.linphone.LinphoneManager.EcCalibrationListener;
 import org.linphone.LinphoneManager.LinphoneConfigException;
 import org.linphone.core.LinphoneCore;
@@ -47,13 +49,18 @@ import org.linphone.mediastream.video.capture.hwconf.Hacks;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
@@ -68,16 +75,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import de.timroes.axmlrpc.XMLRPCCallback;
 import de.timroes.axmlrpc.XMLRPCClient;
 import de.timroes.axmlrpc.XMLRPCException;
 import de.timroes.axmlrpc.XMLRPCServerException;
+import foize.functions.CallthroughLocationDetector;
+import foize.functions.CallthroughLocationSetter;
+import foize.megamobile.R;
 
 public class LinphonePreferencesActivity extends PreferenceActivity implements EcCalibrationListener {
 	private Handler mHandler = new Handler();
 	private Preference ecCalibratePref;
 	private CheckBoxPreference ecPref;
 	private ListPreference mencPref;
+	private ListPreference callthrCountryPref;
+	private CheckBoxPreference mCallthrCountryAutoDetectPref;
 	private int nbAccounts = 1;
 	
 	// Wizard fields
@@ -262,7 +275,7 @@ public class LinphonePreferencesActivity extends PreferenceActivity implements E
 	    	createAccount = (Button) v.findViewById(R.id.wizardCreateAccount);
 	    	createAccount.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					createAccount(username.getText().toString(), password.getText().toString(), email.getText().toString(), false);
+					createAccount("SD"+username.getText().toString(), password.getText().toString(), email.getText().toString(), false);
 				}
 	    	});
 			createAccount.setEnabled(false);
@@ -604,7 +617,101 @@ public class LinphonePreferencesActivity extends PreferenceActivity implements E
 		});
 		ecPref = (CheckBoxPreference) findPreference(pref_echo_cancellation_key);
 		mencPref = (ListPreference) findPreference(pref_media_encryption_key);
-
+		callthrCountryPref = (ListPreference) findPreference(R.string.pref_callthrough_country_key);	
+		callthrCountryPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+					SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
+					SharedPreferences.Editor editor = prefs.edit();
+					editor.putString(getString(R.string.pref_callthrough_country_key), newValue.toString());
+					// TODO: create an elegant way to set the correct callthrough number
+					if (newValue.toString() == getString(R.string.callthrough_country_entry_value_france))
+					{
+						editor.putString(getString(R.string.pref_callthrough_phonenumber_key), getString(R.string.callthrough_number_france));
+					}
+					else if (newValue.toString() == getString(R.string.callthrough_country_entry_value_germany))
+					{
+						editor.putString(getString(R.string.pref_callthrough_phonenumber_key), getString(R.string.callthrough_number_germany));
+					}
+					else if (newValue.toString() == getString(R.string.callthrough_country_entry_value_ireland))
+					{
+						editor.putString(getString(R.string.pref_callthrough_phonenumber_key), getString(R.string.callthrough_number_ireland));
+					}
+					else if (newValue.toString() == getString(R.string.callthrough_country_entry_value_netherlands))
+					{
+						editor.putString(getString(R.string.pref_callthrough_phonenumber_key), getString(R.string.callthrough_number_netherlands));
+					}
+					else if (newValue.toString() == getString(R.string.callthrough_country_entry_value_norway))
+					{
+						editor.putString(getString(R.string.pref_callthrough_phonenumber_key), getString(R.string.callthrough_number_norway));
+					}
+					else if (newValue.toString() == getString(R.string.callthrough_country_entry_value_poland))
+					{
+						editor.putString(getString(R.string.pref_callthrough_phonenumber_key), getString(R.string.callthrough_number_poland));
+					}
+					else if (newValue.toString() == getString(R.string.callthrough_country_entry_value_spain))
+					{
+						editor.putString(getString(R.string.pref_callthrough_phonenumber_key), getString(R.string.callthrough_number_spain));
+					}
+					else if (newValue.toString() == getString(R.string.callthrough_country_entry_value_sweden))
+					{
+						editor.putString(getString(R.string.pref_callthrough_phonenumber_key), getString(R.string.callthrough_number_sweden));
+					}
+					else if (newValue.toString() == getString(R.string.callthrough_country_entry_value_united_kingdom))
+					{
+						editor.putString(getString(R.string.pref_callthrough_phonenumber_key), getString(R.string.callthrough_number_united_kingdom));
+					}
+					else
+					{
+						editor.putString(getString(R.string.pref_callthrough_phonenumber_key), getString(R.string.callthrough_number_netherlands));
+					}
+					
+					editor.commit();
+					
+					return false;
+			}
+		});
+		
+		
+		mCallthrCountryAutoDetectPref = (CheckBoxPreference) findPreference(R.string.pref_callthrough_country_autodetect_key);
+		mCallthrCountryAutoDetectPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				if (newValue.equals(true))
+				{
+					boolean network_enabled=((LocationManager)getSystemService(LOCATION_SERVICE)).isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+					if (network_enabled)
+					{
+						// This class detects the country the user is currently in
+						final CallthroughLocationDetector callDetect = new CallthroughLocationDetector(getApplicationContext());
+						callDetect.startLocationDetection();
+						Toast.makeText(getApplicationContext(), getString(R.string.pref_callthrough_country_autodetect_start), Toast.LENGTH_SHORT).show();
+						IntentFilter filter = new IntentFilter(CallthroughLocationSetter.CALLTHROUGHLOCATIONSET);
+						// When the CallthroughLocationDetector detects the country a broadcast message is send. Here we register a broadcast reciever to intercept this message 
+						registerReceiver(new BroadcastReceiver() {@Override
+						public void onReceive(Context context, Intent intent) {
+							Toast.makeText(getApplicationContext(), getString(R.string.pref_callthrough_country_autodetect_finish) + callDetect.getDetectedCountryName(), Toast.LENGTH_SHORT).show();
+							// Remove the broadcast reciever when we are done processing the message
+							getApplicationContext().unregisterReceiver(this);
+						} }, filter);
+					}
+					else
+					{
+						Toast.makeText(getApplicationContext(), getString(R.string.pref_callthrough_country_autodetect_fail), Toast.LENGTH_LONG).show();
+					}
+				}
+				
+				SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
+				SharedPreferences.Editor editor = prefs.edit();
+				editor.putBoolean(getString(R.string.pref_callthrough_country_autodetect_key), (Boolean) newValue);
+				editor.commit();
+				return true;
+			}
+		});
+		
+		
 		boolean fastCpu = Version.isArmv7();
 		if (fastCpu) {
 			detectAudioCodec(pref_codec_ilbc_key, "iLBC", 8000, 1, false);

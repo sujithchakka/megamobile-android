@@ -18,7 +18,7 @@
 package org.linphone.ui;
 
 
-import org.linphone.R;
+import foize.megamobile.R;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -447,7 +447,7 @@ public class SlidingTab extends ViewGroup {
         mTmpRect = new Rect();
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SlidingTab);
-        mOrientation = a.getInt(org.linphone.R.styleable.SlidingTab_orientation, HORIZONTAL);
+        mOrientation = a.getInt(foize.megamobile.R.styleable.SlidingTab_orientation, HORIZONTAL);
         a.recycle();
         mLeftSlider = new Slider(this,
                 R.drawable.startcall_green,

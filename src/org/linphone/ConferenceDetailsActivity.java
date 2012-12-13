@@ -24,6 +24,8 @@ import org.linphone.core.LinphoneAddress;
 import org.linphone.core.LinphoneCall;
 import org.linphone.mediastream.Version;
 
+import foize.megamobile.R;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;

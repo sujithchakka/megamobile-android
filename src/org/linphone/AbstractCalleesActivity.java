@@ -33,6 +33,8 @@ import org.linphone.core.LinphoneCore;
 import org.linphone.core.Log;
 import org.linphone.ui.ToggleImageButton;
 
+import foize.megamobile.R;
+
 import android.app.ListActivity;
 import android.net.Uri;
 import android.os.Bundle;
@@ -184,7 +186,7 @@ public abstract class AbstractCalleesActivity extends ListActivity implements Li
 	protected void setCalleePicture(ImageView pictureView, LinphoneAddress address) {
 		// May be greatly sped up using a drawable cache
 		Uri uri = LinphoneUtils.findUriPictureOfContactAndSetDisplayName(address, getContentResolver());
-		LinphoneUtils.setImagePictureFromUri(AbstractCalleesActivity.this, pictureView, uri, R.drawable.unknown_person);
+		LinphoneUtils.setImagePictureFromUri(AbstractCalleesActivity.this, pictureView, uri, R.drawable.no_picture);
 	}
 
 	protected void setVisibility(View v, int id, boolean visible) {

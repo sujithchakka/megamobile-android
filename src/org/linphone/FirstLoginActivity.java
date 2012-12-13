@@ -21,6 +21,8 @@ package org.linphone;
 import org.linphone.core.Log;
 import org.linphone.core.LinphoneCore.RegistrationState;
 
+import foize.megamobile.R;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;

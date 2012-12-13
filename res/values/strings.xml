@@ -166,6 +166,13 @@
     <string name="pref_codec_g729">g729</string>
     <string name="pref_codecs">Codecs</string>
     <string name="place_call_chooser">Place a call</string>
+    <string name="pref_callthrough_country">Callthrough Country</string>
+    <string name="pref_callthrough">Callthrough</string>
+    <string name="pref_callthrough_country_autodetect_fail">Unable to auto detect country because network location detection is disabled</string>
+    <string name="pref_callthrough_country_autodetect_start">Starting auto detecting callthrough country please wait....</string>
+    <string name="pref_callthrough_country_autodetect_finish">Finished auto detecting callthrough. Country : </string>
+     
+   
 <string name="pref_debug">Debug</string>
 <string name="about_report_issue">Report issue</string>
 <string name="about_bugreport_email_text">Describe problem here</string>
@@ -198,8 +205,8 @@
 <string name="cont">Continue</string>
 <string name="never_remind">Never remind me</string>
 <string name="config_error">%s, do you want to go to the settings page ?</string>
-<string name="initial_config_error">&lt;P ALIGN=CENTER&gt;No SIP account has been configured yet, do you want to go to the settings page ?&lt;br/&gt;&lt;br/&gt; Need help ?&lt;br/&gt; &quot;http://www.linphone.org/m/help&quot;&lt;/p&gt;</string>
-<string name="first_launch_message">&lt;P ALIGN=CENTER&gt;Welcome to Linphone SIP phone&lt;br/&gt;&lt;br/&gt; If you are new to SIP, have a look at&lt;br/&gt; &quot;http://www.linphone.org/m/help&quot;&lt;/p&gt; </string>
+<string name="initial_config_error">&lt;P ALIGN=CENTER&gt;No SIP account has been configured yet, do you want to go to the settings page ?&lt;br/&gt;&lt;br/&gt; For more information please visit&lt;br/&gt; &quot;http://www.megamobile.eu&quot;&lt;/p&gt;</string>
+<string name="first_launch_message">&lt;P ALIGN=CENTER&gt;Welcome to Mega mobile&lt;br/&gt;&lt;br/&gt; For more information please visit&lt;br/&gt; &quot;http://www.megamobile.eu&quot;&lt;/p&gt; </string>
 <string name="ec_calibration_launch_message">Starting echo cancelation audio calibration </string>
 <string name="warning_already_incall">Cannot initiate a new call because a call is already engaged</string>
 <string name="tab_history">History</string>
@@ -260,6 +267,21 @@
 
 <string name="pref_help_proxy">SIP proxy hostname or ip address (optional)</string>
 <string name="pref_help_outbound_proxy">Route all calls through SIP proxy</string>
-<string name="pref_help_username">Example: john if your account is john@sip.linphone.org</string>
-<string name="pref_help_domain">sip.linphone.org if your account is john@sip.linphone.org</string>
+<string name="pref_help_username">Example: john if your account is john@voip.mytelco.biz</string>
+<string name="pref_help_domain">voip.mytelco.com if your account is john@voip.mytelco.biz</string>
+<string-array name="dail_modes">
+        <item>SIP</item>
+        <item>GSM</item>
+</string-array>
+<string-array name="pref_countries_entries">
+        <item> France</item>
+        <item> Germany</item>
+        <item> Ireland</item>
+        <item> Netherlands</item>
+        <item> Norway</item>
+        <item> Poland</item>
+        <item> Spain</item>
+        <item> Sweden</item>
+        <item> United Kingdom</item>
+</string-array>
 </resources>

@@ -2,14 +2,16 @@
 <resources>
 
 
-	<string name="app_name">Linphone</string>
-	<string name="notification_title">Linphone</string>
+	<string name="app_name">Mega mobile</string>
+	<string name="notification_title">Mega mobile</string>
 	<string name="wait_dialog_text">Starting up</string>
 	<string name="notification_registered">Registered to %s </string> 
 	<string name="notification_register_failure">Fails to register to %s</string>
-	<string name="about_text">Linphone %s SIP (rfc 3261) compatible phone under GNU Public License V2\n http://www.linphone.org\n\nInstructions\nhttp://www.linphone.org/m/help\n\n© 2011 Belledonne Communications</string>
+	<string name="about_text">Mega mobile\n http://www.megamobile.eu\n  Mega mobile is based on Linphone %s SIP (rfc 3261) and is released under GNU Public License V2\n http://www.linphone.org\n\ Sources available at\n http://www.foize.com </string>
 
     <string name="tunnel_host"></string>
     <string name="default_tunnel_mode_entry_value">@string/tunnel_mode_entry_value_disabled</string>
+    <string name="pref_callthrough_country_default">@string/callthrough_country_entry_value_netherlands</string>
+    <string name="pref_callthrough_phonenumber_default">@string/callthrough_number_netherlands</string>
 </resources>
  

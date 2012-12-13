@@ -40,6 +40,8 @@ import org.linphone.core.Log;
 import org.linphone.mediastream.Version;
 import org.linphone.ui.Numpad;
 
+import foize.megamobile.R;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;

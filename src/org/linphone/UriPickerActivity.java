@@ -23,6 +23,8 @@ import org.linphone.mediastream.Version;
 import org.linphone.ui.AddressAware;
 import org.linphone.ui.AddressText;
 
+import foize.megamobile.R;
+
 import android.app.Activity;
 import android.app.TabActivity;
 import android.content.Intent;

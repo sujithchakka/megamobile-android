@@ -21,6 +21,8 @@ package org.linphone;
 import java.util.Collections;
 import java.util.List;
 
+import foize.megamobile.R;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;

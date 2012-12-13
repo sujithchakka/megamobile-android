@@ -31,6 +31,8 @@ import org.linphone.core.LinphoneCore;
 import org.linphone.core.LinphoneProxyConfig;
 import org.linphone.core.Log;
 
+import foize.megamobile.R;
+
 import android.app.ListActivity;
 import android.content.Context;
 import android.net.Uri;
@@ -154,7 +156,7 @@ public class HistoryActivity extends ListActivity {
 			}
 
 			Uri uri = LinphoneUtils.findUriPictureOfContactAndSetDisplayName(lAddress, getContentResolver());
-			LinphoneUtils.setImagePictureFromUri(lView.getContext(), lContactPicture, uri, R.drawable.unknown_person);
+			LinphoneUtils.setImagePictureFromUri(lView.getContext(), lContactPicture, uri, R.drawable.no_picture);
 
 			LinphoneCore lc = LinphoneManager.getLc();
 			LinphoneProxyConfig lProxyConfig = lc.getDefaultProxyConfig();
@@ -177,7 +179,6 @@ public class HistoryActivity extends ListActivity {
 			}
 
 			return lView;
-			
 		}
 		  
 	  }

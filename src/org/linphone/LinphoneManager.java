@@ -26,12 +26,12 @@ import static android.media.AudioManager.ROUTE_SPEAKER;
 import static android.media.AudioManager.STREAM_RING;
 import static android.media.AudioManager.STREAM_VOICE_CALL;
 import static android.media.AudioManager.VIBRATE_TYPE_RINGER;
-import static org.linphone.R.string.pref_codec_amr_key;
-import static org.linphone.R.string.pref_codec_amrwb_key;
-import static org.linphone.R.string.pref_codec_ilbc_key;
-import static org.linphone.R.string.pref_codec_speex16_key;
-import static org.linphone.R.string.pref_codec_speex32_key;
-import static org.linphone.R.string.pref_video_enable_key;
+import static foize.megamobile.R.string.pref_codec_amr_key;
+import static foize.megamobile.R.string.pref_codec_amrwb_key;
+import static foize.megamobile.R.string.pref_codec_ilbc_key;
+import static foize.megamobile.R.string.pref_codec_speex16_key;
+import static foize.megamobile.R.string.pref_codec_speex32_key;
+import static foize.megamobile.R.string.pref_video_enable_key;
 import static org.linphone.core.LinphoneCall.State.CallEnd;
 import static org.linphone.core.LinphoneCall.State.Error;
 import static org.linphone.core.LinphoneCall.State.IncomingReceived;
@@ -79,6 +79,8 @@ import org.linphone.mediastream.video.capture.AndroidVideoApi5JniWrapper;
 import org.linphone.mediastream.video.capture.hwconf.AndroidCameraConfiguration;
 import org.linphone.mediastream.video.capture.hwconf.AndroidCameraConfiguration.AndroidCamera;
 import org.linphone.mediastream.video.capture.hwconf.Hacks;
+
+import foize.megamobile.R;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -139,8 +141,11 @@ public final class LinphoneManager implements LinphoneCoreListener {
 	private static LinphonePreferenceManager sLPref;
 	private String lastLcStatusMessage;
 	private String basePath;
+	private static int		mCallMode;
 	private static boolean sExited;
 	private boolean videoInitiator = false;
+	public static final int SIPCALLMODE = 1;
+	public static final int GSMCALLMODE = 2;
 
 	private WakeLock mIncallWakeLock;
 
@@ -174,6 +179,8 @@ public final class LinphoneManager implements LinphoneCoreListener {
 		mRingSoundFile = basePath + "/oldphone_mono.wav"; 
 		mRingbackSoundFile = basePath + "/ringback.wav";
 		mPauseSoundFile = basePath + "/toy_mono.wav";
+		mCallMode = LinphoneManager.SIPCALLMODE;
+		
 
 		sLPref = LinphonePreferenceManager.getInstance(c);
 		mAudioManager = ((AudioManager) c.getSystemService(Context.AUDIO_SERVICE));
@@ -295,10 +302,26 @@ public final class LinphoneManager implements LinphoneCoreListener {
 	}
 	
 	public static synchronized final LinphoneCore getLc() {
-		return getInstance().mLc;
+		try
+		{
+			return getInstance().mLc;
+		}
+		catch(Exception e)
+		{
+			e.toString();
+			return null;
+		}
 	}
 
-
+	public   void setCallMode(int mode)
+	{
+		mCallMode = mode;
+	}
+	
+	public  int getCallMode()
+	{
+		return mCallMode;
+	}
 	
 	public boolean isSpeakerOn() {
 		if (Hacks.needRoutingAPI() || sLPref.useAudioRoutingAPIHack()) {
@@ -1182,8 +1205,8 @@ public final class LinphoneManager implements LinphoneCoreListener {
 		e.putBoolean(getString(R.string.pref_codec_pcmu_key), true);
 		e.putBoolean(getString(R.string.pref_codec_speex8_key), true);
 		e.putBoolean(getString(R.string.pref_codec_g722_key), false);
-		e.putBoolean(getString(pref_codec_speex16_key), fastCpu);
-		e.putBoolean(getString(pref_codec_speex32_key), fastCpu);
+		e.putBoolean(getString(R.string.pref_codec_speex16_key), fastCpu);
+		e.putBoolean(getString(R.string.pref_codec_speex32_key), fastCpu);
 
 		boolean ilbc = LinphoneService.isReady() && LinphoneManager.getLc()
 		.findPayloadType("iLBC", 8000)!=null;

@@ -15,9 +15,51 @@
 		<item>@string/tunnel_mode_entry_value_always</item>
 	<item>@string/tunnel_mode_entry_value_auto</item>
 	</string-array> 
+	
+	<string name="callthrough_number_france">+33489734500</string>
+	<string name="callthrough_number_germany">+493025557560</string>
+	<string name="callthrough_number_ireland">+35314475322</string>
+	<string name="callthrough_number_netherlands">+31107138174</string>
+	<string name="callthrough_number_norway">+4721531184</string>
+	<string name="callthrough_number_poland">+48223073662</string>
+	<string name="callthrough_number_spain">+34912910197</string>
+	<string name="callthrough_number_sweden">+46406459910</string>
+	<string name="callthrough_number_united_kingdom">+442031060193</string>
+	
+	<string name="prefix_france">33</string>
+	<string name="prefix_germany">49</string>
+	<string name="prefix_ireland">35</string>
+	<string name="prefix_netherlands">31</string>
+	<string name="prefix_norway">47</string>
+	<string name="prefix_poland">48</string>
+	<string name="prefix_spain">34</string>
+	<string name="prefix_sweden">46</string>
+	<string name="prefix_united_kingdom">44</string>
+
+	<string name="callthrough_country_entry_value_france">France</string>
+	<string name="callthrough_country_entry_value_germany">Germany</string>
+	<string name="callthrough_country_entry_value_ireland">Ireland</string>
+	<string name="callthrough_country_entry_value_netherlands">Netherlands</string>
+	<string name="callthrough_country_entry_value_norway">Norway</string>
+	<string name="callthrough_country_entry_value_poland">Poland</string>
+	<string name="callthrough_country_entry_value_spain">Spain</string>
+	<string name="callthrough_country_entry_value_sweden">Sweden</string>
+	<string name="callthrough_country_entry_value_united_kingdom">United_Kingdom</string>
+	<string-array name="pref_country_entry_values">
+		<item>@string/callthrough_country_entry_value_france</item>
+		<item >@string/callthrough_country_entry_value_germany</item>
+		<item>@string/callthrough_country_entry_value_ireland</item>
+		<item>@string/callthrough_country_entry_value_netherlands</item>
+		<item>@string/callthrough_country_entry_value_norway</item>
+		<item >@string/callthrough_country_entry_value_poland</item>
+		<item>@string/callthrough_country_entry_value_spain</item>
+		<item>@string/callthrough_country_entry_value_sweden</item>
+		<item>@string/callthrough_country_entry_value_united_kingdom</item>
+	</string-array> 
 		<string name="pref_tunnel_host_key">pref_tunnel_host_key</string>
 		<string name="pref_tunnel_port_key">pref_tunnel_port_key</string>
 	<string name="tunnel_mode_entry_value_auto">auto</string>
+	
 
 	<string name="pref_audio_use_specific_mode_key">pref_audio_use_specific_mode_key</string>
 	<string name="pref_audio_hacks_use_galaxys_hack_key">pref_audio_hacks_use_galaxys_hack_key</string>
@@ -79,4 +121,10 @@
     <string name="pref_media_encryption_key_none">none</string>
     <string name="pref_media_encryption_key_srtp">srtp</string>
     <string name="pref_media_encryption_key_zrtp">zrtp</string>
+    <string name="pref_callthrough_phonenumber_key">callthrough_phonenumber_key</string>
+    <string name="pref_callthrough_country_key">callthrough_country_key</string>
+    <string name="pref_callthrough_country_autodetect">Country Autodetect</string>
+    <string name="pref_callthrough_country_autodetect_key">callthrough_country_autodetect</string>
+    <string name="pref_callthrough_country_autodetect_defaultvalue">true</string>
+    
 </resources>
